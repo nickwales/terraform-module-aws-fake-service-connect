@@ -46,7 +46,8 @@ resource "aws_launch_template" "lt" {
 
   user_data = base64encode(templatefile("${path.module}/templates/userdata.sh.tftpl", { 
     name                  = var.name,
-    message               = local.message,
+    fake_service_name     = var.fake_service_name
+    fake_service_message  = local.fake_service_message,
     consul_datacenter     = var.consul_datacenter, 
     consul_partition      = var.consul_partition,
     consul_version        = var.consul_version,
