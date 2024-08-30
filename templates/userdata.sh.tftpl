@@ -46,9 +46,13 @@ WantedBy=multi-user.target
 EOT
 
 NAMESPACE=""
+NAMESPACE_COMMAND=""
+PARTITION=""
 case ${consul_binary} in
   consul-enterprise)
     $$NAMESPACE="namespace = ${consul_namespace}"
+    $$NAMESPACE_COMMAND="-namespace=${consul_namespace}"
+    $$PARTITION_COMMAND="-partition=${consul_partition}"
     ;;
 esac
 
@@ -185,16 +189,15 @@ CONSUL_UID=$(id --user consul)
 ENVOY_UID=$(id --user envoy)
 
 consul connect redirect-traffic \
-    -namespace="${consul_namespace}" \
-    -partition="${consul_partition}" \
-    -proxy-id="$${1}-sidecar-proxy" \
-    -proxy-uid="$${ENVOY_UID}" \
-    -exclude-uid="$${CONSUL_UID}" \
-    -exclude-inbound-port=22 \
-    -exclude-inbound-port=8500 \
-    -exclude-inbound-port=8080 \
-    -exclude-outbound-port=8080 \
-    -exclude-outbound-port=443
+  $${NAMESPACE_COMMAND} $${PARTITION_COMMAND} \
+  -proxy-id="$${1}-sidecar-proxy" \
+  -proxy-uid="$${ENVOY_UID}" \
+  -exclude-uid="$${CONSUL_UID}" \
+  -exclude-inbound-port=22 \
+  -exclude-inbound-port=8500 \
+  -exclude-inbound-port=8080 \
+  -exclude-outbound-port=8080 \
+  -exclude-outbound-port=443
 EOT
 chmod +x /usr/local/bin/consul-tproxy-redirect
 chown envoy:envoy /usr/local/bin/consul-tproxy-redirect
@@ -233,9 +236,8 @@ User=envoy
 Group=envoy
 EnvironmentFile=/etc/consul.d/consul.env
 ExecStart=/usr/bin/consul connect envoy \
-            -partition=${consul_partition} \
-            -namespace=${consul_namespace} \
-            -sidecar-for=${fake_service_name}
+  $${NAMESPACE_COMMAND} $${PARTITION_COMMAND} \
+  -sidecar-for=${fake_service_name}
 ExecStartPost=+/usr/local/bin/consul-tproxy-redirect ${fake_service_name}
 #ExecStopPost=+<script for cleaning up iptables>
 Restart=on-failure
