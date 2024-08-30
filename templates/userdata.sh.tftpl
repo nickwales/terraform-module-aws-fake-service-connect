@@ -209,14 +209,13 @@ do
 done
 EOT
 
-chmod +x /usr/local/bin/flush-iptables
-chown envoy:envoy /usr/local/bin/flush-iptables
-
-
 ## Add an envoy user
 useradd envoy
 mkdir /opt/envoy_stats
 chown -R envoy:envoy /opt/envoy_stats
+
+chmod +x /usr/local/bin/flush-iptables
+chown envoy:envoy /usr/local/bin/flush-iptables
 
 ## Enable the sidecar proxy
 cat <<EOT > "/etc/systemd/system/${fake_service_name}-sidecar-proxy.service"
