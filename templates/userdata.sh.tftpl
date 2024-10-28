@@ -56,6 +56,27 @@ case ${consul_binary} in
     ;;
 esac
 
+PROXY_CONFIG=$(cat <<-END
+      proxy {
+        mode = "transparent"
+      }
+END
+)
+
+if [ "${transparent_proxy}" = false ] ; then
+  PROXY_CONFIG=$(cat <<-END
+      proxy {
+        upstreams = [      
+         {
+            destination_name = "lambda"
+            local_bind_port = 9191
+         }        
+        ]
+      }
+END
+)  
+fi
+
 cat <<EOT > /etc/consul.d/${fake_service_name}.hcl
 service {
   name = "${fake_service_name}"
@@ -78,9 +99,7 @@ service {
 
   connect {
     sidecar_service {
-      proxy {
-        mode = "transparent"
-      }
+$${PROXY_CONFIG}
     }
   }  
   
@@ -167,6 +186,7 @@ EOT
 systemctl restart systemd-resolved
 
 
+if [ "${transparent_proxy}" = true ] ; then
 ## Configure Consul Transparent proxy
 # We exclude port 443 outbound for SSM to work
 
@@ -211,6 +231,8 @@ do
   iptables --table nat -X "CONSUL_PROXY_$${i}"
 done
 EOT
+
+fi
 
 ## Add an envoy user
 useradd envoy

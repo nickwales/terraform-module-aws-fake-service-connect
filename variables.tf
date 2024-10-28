@@ -15,6 +15,11 @@ variable "fake_service_message" {
   default = "fake-service"
 }
 
+variable "transparent_proxy" {
+  description = "Enable or disable the transparent proxy"
+  default = true
+}
+
 variable "upstream_uris" {
   description = "Comma separated list of upstream URIs"
   default = ""
