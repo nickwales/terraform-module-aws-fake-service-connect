@@ -1,7 +1,7 @@
 ## Fake Service Configurations
 
 variable "name" {
-  description = "The name fake service and AWS resources will display"
+  description = "The name of the project, to enable retry_join"
   default = ""
 }
 
@@ -72,7 +72,7 @@ variable "consul_license" {
   default = ""
 }
 variable "consul_version" {
-  default = "1.18.1"
+  default = "1.20.0"
 }
 variable "consul_binary" {
   description = "Should be either 'consul' or 'consul-enterprise'"

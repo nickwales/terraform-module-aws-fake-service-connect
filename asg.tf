@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "asg" {
-  name                      = "fake-service-mesh-${var.name}-${var.consul_datacenter}"
+  name                      = "fake-service-mesh-${var.fake_service_name}-${var.consul_datacenter}"
   max_size                  = 3
   min_size                  = 1
   health_check_grace_period = 300
@@ -21,7 +21,7 @@ resource "aws_autoscaling_group" "asg" {
 
   tag {
     key                 = "Name"
-    value               = "fake-service-mesh-${var.name}-${var.consul_datacenter}"
+    value               = "fake-service-mesh-${var.fake_service_name}-${var.consul_datacenter}"
     propagate_at_launch = true
   }
 }
@@ -33,13 +33,13 @@ resource "aws_launch_template" "lt" {
   iam_instance_profile {
     name = aws_iam_instance_profile.profile.name
   }
-  name = "fake-service-mesh-${var.name}-${var.consul_datacenter}"
+  name = "fake-service-mesh-${var.fake_service_name}-${var.consul_datacenter}"
   tag_specifications {
     resource_type = "instance"
 
     tags = {
-      Name = "fake-service-mesh-${var.name}-${var.consul_datacenter}",
-      role = "fake-service-mesh-${var.name}-${var.consul_datacenter}",
+      Name = "fake-service-mesh-${var.fake_service_name}-${var.consul_datacenter}",
+      role = "fake-service-mesh-${var.fake_service_name}-${var.consul_datacenter}",
     }
   }  
   update_default_version = true
