@@ -38,6 +38,13 @@ resource "aws_iam_role_policy" "policy" {
             Effect = "Allow"
             Resource = "*"
           },
+          {
+            Action = [
+                  "lambda:*"
+              ],
+            Effect = "Allow"
+            Resource = "arn:aws:lambda:us-east-1:*:*"
+          }             
         ]
     })
 }
