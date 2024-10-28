@@ -56,7 +56,7 @@ case ${consul_binary} in
     ;;
 esac
 
-cat <<EOT > /etc/consul.d/${name}.hcl
+cat <<EOT > /etc/consul.d/${fake_service_name}.hcl
 service {
   name = "${fake_service_name}"
   port = ${app_port}
