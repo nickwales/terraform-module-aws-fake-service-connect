@@ -4,7 +4,7 @@ resource "aws_autoscaling_group" "asg" {
   min_size                  = 1
   health_check_grace_period = 300
   health_check_type         = "ELB"
-  desired_capacity          = "${var.instance_count}"
+  desired_capacity          = "${var.desired_capacity}"
   
   instance_refresh {
     strategy               = "Rolling"
@@ -54,13 +54,12 @@ resource "aws_launch_template" "lt" {
     consul_token          = var.consul_token,
     consul_encryption_key = var.consul_encryption_key,
     consul_license        = var.consul_license,
-    consul_agent_ca       = var.consul_agent_ca,
+    ca_file               = var.ca_file,
     consul_binary         = var.consul_binary,
     consul_namespace      = var.consul_namespace,
-    consul_agent_token    = var.consul_agent_token,
     transparent_proxy     = var.transparent_proxy,
     envoy_version         = var.envoy_version,    
-    instance_count        = var.instance_count,
+    desired_capacity      = var.desired_capacity,
     upstream_uris         = var.upstream_uris,
     app_port              = var.app_port,
     target_groups         = var.target_groups,

@@ -46,7 +46,7 @@ variable "private_subnets" {
   default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
-variable "instance_count" {
+variable "desired_capacity" {
   description = "The number of frontend app instances in the ASG"
   default = 1
 }
@@ -99,4 +99,5 @@ variable "consul_partition" {
 variable "consul_encryption_key" {
   default = "P4+PEZg4jDcWkSgHZ/i3xMuHaMmU8rx2owA4ffl2K8w="
 }
-variable "consul_agent_ca" {}
+
+variable "ca_file" {}
